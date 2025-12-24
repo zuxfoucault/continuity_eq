@@ -1,0 +1,97 @@
+\documentclass[paper=a4,fontsize=12pt,pagesize,DIV=calc]{scrreprt}
+\input{qnote}
+\renewcommand*\theequation{\arabic{equation}}
+
+
+\begin{document}
+
+\noindent The first-order ordinary differential equation (ODE)
+\begin{equation}
+\frac{d}{dt} x_t = v_t(x_t) \label{eq:ode}
+\end{equation}
+where $x_t \in \mathbb{R}^d$ for time $t \in [0, T]$, and where $v : [0, T] \times \mathbb{R}^d \to \mathbb{R}^d$ is a time-dependent vector field that is generally non-linear. If we sample a random initial condition $x_0 \sim p_0$ from some distribution $p_0$, then the time-evolved random vector $x_t \sim p_t$ will also be a random variable with some probability density function (PDF) $p_t$, for all $t \in [0, T]$. By invoking the change of variable formula for PDFs on infinitesimal time steps of Eq. (\ref{eq:ode}), one can show that $p_t$ satisfies the \emph{continuity equation}
+\begin{equation}
+\frac{\partial}{\partial t} p_t(x)
+= - \nabla \cdot \bigl[v_t(x)p_t(x)\bigr] \label{eq:ce}
+\end{equation}
+with respect to the velocity field $v_t$, for time $t \in [0, T]$.
+
+\begin{proof}
+Fix $t$ and consider a small time increment $\varepsilon > 0$. By a first-order Taylor expansion of the ODE solution,
+\begin{equation}
+x_{t+\varepsilon}
+= x_t + \varepsilon v_t(x_t) + o(\varepsilon). \label{eq:increment}
+\end{equation}
+Define the deterministic map
+\begin{equation}
+T_\varepsilon(x) := x + \varepsilon v_t(x), \label{eq:deter}
+\end{equation}
+so that, to first order in $\varepsilon$, we have $x_{t+\varepsilon} = T_\varepsilon(x_t)$.
+
+\noindent Since $x_{t+\varepsilon}$ is obtained by pushing forward $x_t$ through $T_\varepsilon$, the change-of-variables formula for probability densities yields
+\begin{equation}
+p_{t+\varepsilon}(y)
+= p_t\bigl(T_\varepsilon^{-1}(y)\bigr)
+\left|\det \nabla T_\varepsilon^{-1}(y)\right|. \label{eq:cov}
+\end{equation}
+
+\noindent From the definition of $T_\varepsilon$, its inverse admits the expansion
+\begin{equation}
+T_\varepsilon^{-1}(y)
+= y - \varepsilon v_t(y) + o(\varepsilon). \label{eq:inv}
+\end{equation}
+Therefore (Taylor expansion):
+\begin{equation}
+p_t\bigl(T_\varepsilon^{-1}(y)\bigr)
+= p_t(y) - \varepsilon \nabla p_t(y) \cdot v_t(y) + o(\varepsilon). \label{eq:taylor}
+\end{equation}
+
+\noindent The Jacobian matrix of $T_\varepsilon$ is
+\begin{equation}
+\nabla T_\varepsilon(x) = I + \varepsilon \nabla v_t(x), \label{eq:jacobian}
+\end{equation}
+so that
+\begin{equation}
+\det \nabla T_\varepsilon(x)
+= 1 + \varepsilon \nabla \cdot v_t(x) + o(\varepsilon). \label{eq:jacobian-determinant}
+\end{equation}
+Consequently,
+\begin{equation}
+\det \nabla T_\varepsilon^{-1}(y)
+= 1 - \varepsilon \nabla \cdot v_t(y) + o(\varepsilon). \label{eq:j2}
+\end{equation}
+Substituting the above expansions into the change-of-variables formula, we obtain
+\begin{align}
+p_{t+\varepsilon}(y)
+&= \Bigl(p_t(y) - \varepsilon \nabla p_t(y) \cdot v_t(y)\Bigr)
+   \Bigl(1 - \varepsilon \nabla \cdot v_t(y)\Bigr)
+   + o(\varepsilon) \\
+&= p_t(y)
+   - \varepsilon \Bigl[
+      \nabla p_t(y) \cdot v_t(y)
+      + p_t(y)\nabla \cdot v_t(y)
+     \Bigr]
+   + o(\varepsilon). \label{ep:cov}
+\end{align}
+Noting that
+\begin{equation}
+\nabla \cdot \bigl(v_t(y)p_t(y)\bigr)
+= \nabla p_t(y) \cdot v_t(y)
+  + p_t(y)\nabla \cdot v_t(y), \label{eq:product}
+\end{equation}
+we conclude that
+\begin{equation}
+p_{t+\varepsilon}(y)
+= p_t(y) - \varepsilon \nabla \cdot \bigl(v_t(y)p_t(y)\bigr)
+  + o(\varepsilon). \label{eq:cld}
+\end{equation}
+
+\noindent Dividing both sides by $\varepsilon$ and taking the limit $\varepsilon \to 0$ yields
+\begin{equation}
+\frac{\partial}{\partial t} p_t(y)
+= - \nabla \cdot \bigl(v_t(y)p_t(y)\bigr), \label{eq:limit}
+\end{equation}
+which is precisely the continuity equation.
+\end{proof}
+
+\end{document}
